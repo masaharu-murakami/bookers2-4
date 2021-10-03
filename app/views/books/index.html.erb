@@ -1,0 +1,50 @@
+<!--Books 投稿一覧ページ-->
+<div class="container px-5 px-sm-0">
+  <div class="row">
+    <div class="col-md-3">
+      <%= render 'users/left', user: @user, book: @book %> </div>
+    <div class="col-md-8 offset-md-1">
+    <h2>Books</h2>
+    <table class="table table-hover">
+      <thead>
+        <th></th>
+        <th>Title</th>
+        <th>Opinion</th>
+        <th colspan="3"></th>
+      </thead>
+
+      <% @books.each do |book| %>
+      <tr>
+        <td><%= link_to attachment_image_tag(book.user, :profile_image, :fill, 100, 100, format: 'jpeg', fallback: "no_image.jpg"), user_path(book.user.id) %></td>
+            <%#= link_to attachment_image_tag(book.user, :profile_image, format: "jpeg", fallback: "no_image.jpg", size: "40x40"), user_path(book.user_id) %>
+        <td><%= link_to book.title, book_path(book.id) %></td>
+
+        <td><%= book.body %></td>
+
+        <!--startいいね機能-->
+        <% if book.favorited_by?(current_user) %>
+                <td>
+                  <%= link_to book_favorites_path(book), method: :delete do %>
+                    <i class="fa fa-heart fa-xs" aria-hidden="true"  style="color: red;">
+                      <%= book.favorites.count %>
+                    </i>
+                  <% end %>
+                </td>
+              <% else %>
+                <td>
+                  <%= link_to book_favorites_path(book), method: :post do %>
+                    <i class="fa fa-heart fa-xs" aria-hidden="true">
+                      <%= book.favorites.count %>
+                    </i>
+                  <% end %>
+                </td>
+              <% end %>
+              <td>
+                コメント数:<%= book.book_comments.count %>
+              </td>
+            </tr>
+          </tbody>
+          <% end %>
+        </table>
+    </div>
+  </div>
